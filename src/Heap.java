@@ -45,7 +45,7 @@ public class Heap {
             array.add(value);
             return;
         }
-        array.add(array.size(), value);
+        array.add(value);
         bubbleUp();
     }
 
@@ -95,7 +95,7 @@ public class Heap {
      *  @return Boolean value if the heap is empty or not
      */
     public boolean isEmpty(){
-        return array.size() == 0;
+        return array.isEmpty();
     }
 
     private void bubbleUp(){

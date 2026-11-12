@@ -61,6 +61,10 @@ public class Heap {
         return size;
     }
 
+    public boolean isEmpty(){
+        return size == 0;
+    }
+
     private void bubbleUp(){
         int currentIndex = size-1;
         while(currentIndex > 0){
@@ -72,27 +76,14 @@ public class Heap {
     }
 
     private void bubbleDown(int current){
-        int currentVal = array.get(current);
         int left = current * 2 + 1;
         int right = current * 2 + 2;
-        if(left < size && right < size){
-            int leftVal = array.get(left);
-            int rightVal = array.get(right);
-            if(leftVal < currentVal && rightVal < currentVal){
-                if(leftVal <= rightVal){
-                    swap(current, left);
-                    bubbleDown(left);
-                }else{
-                    swap(current, right);
-                    bubbleDown(right);
-                }
-            }
-        }else if(left < size && array.get(left) < currentVal){
-            swap(current, left);
-            bubbleDown(left);
-        }else if(right < size && array.get(right) < currentVal){
-            swap(current, right);
-            bubbleDown(right);
+        int smallest = current;
+        if(left < size && array.get(left) < array.get(smallest)) smallest = left;
+        if(right < size && array.get(right) < array.get(smallest)) smallest = right;
+        if(smallest != current){
+            swap(current, smallest);
+            bubbleDown(smallest);
         }
     }
 

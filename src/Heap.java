@@ -34,15 +34,36 @@ public class Heap {
     }
 
     public void add(int value){
-        array.add(size - 1, value);
+        if(size == 0){
+            array.add(value);
+            size++;
+            return;
+        }
+        array.add(size, value);
         size++;
-        if(size <= 1) return;
         bubbleUp();
+    }
+
+    public int pop(){
+        int removed = array.get(0);
+        array.set(0, array.get(size-1));
+        array.remove(size-1);
+        size--;
+        bubbleDown(0);
+        return removed;
+    }
+
+    public int peek(){
+        return array.get(0);
+    }
+
+    public int size(){
+        return size;
     }
 
     private void bubbleUp(){
         int currentIndex = size-1;
-        while(currentIndex > 1){
+        while(currentIndex > 0){
             int parentIndex = (currentIndex - 1) / 2 ;
             if(array.get(currentIndex) < array.get(parentIndex)) swap(currentIndex, parentIndex);
             else return;
@@ -50,9 +71,34 @@ public class Heap {
         }
     }
 
+    private void bubbleDown(int current){
+        int currentVal = array.get(current);
+        int left = current * 2 + 1;
+        int right = current * 2 + 2;
+        if(left < size && right < size){
+            int leftVal = array.get(left);
+            int rightVal = array.get(right);
+            if(leftVal < currentVal && rightVal < currentVal){
+                if(leftVal <= rightVal){
+                    swap(current, left);
+                    bubbleDown(left);
+                }else{
+                    swap(current, right);
+                    bubbleDown(right);
+                }
+            }
+        }else if(left < size && array.get(left) < currentVal){
+            swap(current, left);
+            bubbleDown(left);
+        }else if(right < size && array.get(right) < currentVal){
+            swap(current, right);
+            bubbleDown(right);
+        }
+    }
+
     private void swap(int i1, int i2){
         int temp = array.get(i2);
-        array.add(i2, array.get(i1));
-        array.add(i1, temp);
+        array.set(i2, array.get(i1));
+        array.set(i1, temp);
     }
 }

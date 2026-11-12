@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * A min-heap. 
@@ -25,48 +26,46 @@ import java.util.List;
  *  - hold private instance variables
  */
 public class Heap {
-    private int size;
     private List<Integer> array;
 
     public Heap(){
-        size = 0;
         array = new ArrayList<>();
     }
 
     public void add(int value){
-        if(size == 0){
+        if(array.size() == 0){
             array.add(value);
-            size++;
             return;
         }
-        array.add(size, value);
-        size++;
+        array.add(array.size(), value);
         bubbleUp();
     }
 
     public int pop(){
+        if(isEmpty()) throw new NoSuchElementException("Heap is empty");
+        if(array.size() == 1) return array.remove(0);
         int removed = array.get(0);
-        array.set(0, array.get(size-1));
-        array.remove(size-1);
-        size--;
+        array.set(0, array.get(array.size()-1));
+        array.remove(array.size()-1);
         bubbleDown(0);
         return removed;
     }
 
     public int peek(){
+        if(isEmpty()) throw new NoSuchElementException("Heap is empty");
         return array.get(0);
     }
 
     public int size(){
-        return size;
+        return array.size();
     }
 
     public boolean isEmpty(){
-        return size == 0;
+        return array.size() == 0;
     }
 
     private void bubbleUp(){
-        int currentIndex = size-1;
+        int currentIndex = array.size()-1;
         while(currentIndex > 0){
             int parentIndex = (currentIndex - 1) / 2 ;
             if(array.get(currentIndex) < array.get(parentIndex)) swap(currentIndex, parentIndex);
@@ -79,8 +78,8 @@ public class Heap {
         int left = current * 2 + 1;
         int right = current * 2 + 2;
         int smallest = current;
-        if(left < size && array.get(left) < array.get(smallest)) smallest = left;
-        if(right < size && array.get(right) < array.get(smallest)) smallest = right;
+        if(left < array.size() && array.get(left) < array.get(smallest)) smallest = left;
+        if(right < array.size() && array.get(right) < array.get(smallest)) smallest = right;
         if(smallest != current){
             swap(current, smallest);
             bubbleDown(smallest);
